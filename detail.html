@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block content %}
+
+ <!-- Product Details Section Begin -->
+ <section class="product-details spad">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="product__details__pic">
+                  <div class="product__details__pic__left product__thumb nice-scroll">
+
+                    <!-- {% if product.product_image %}
+                    <a class="pt active" href="#product-1">
+                      <img src="{{product.product_image.url}}" alt="{{product.title}}">
+                  </a>
+
+                      {% else %}
+                      <a class="pt active" href="#product-1">
+                        <img src="{% static 'img/product-detail-1.jpg' %}" alt="{{product.title}}">
+                      </a>
+                    
+                      {% endif %} -->
+
+                  </div>
+                  <div class="product__details__slider__content">
+                      <div class="product__details__pic__slider owl-carousel">
+                        {% if product.product_image %}
+                          <img data-hash="product-1" class="product__big__img" src="{{product.product_image.url}}" alt="{{product.title}}">
+                        {% else %}
+                          <img data-hash="product-2" class="product__big__img" src="{% static 'img/product-detail-1.jpg' %}" alt="">
+                        {% endif %}  
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+          <div class="col-lg-6">
+              <div class="product__details__text">
+                  <h3>{{product.title}} <span>Brand: SKMEI {{product.sku}}</span></h3>
+                  
+                  <div class="product__details__price">£ {{product.price}} </div>
+                  <p>{{product.short_description}}</p>
+                  <div class="product__details__button">
+                      <div class="quantity">
+                          <span>Quantity:</span>
+                          <div class="pro-qty">
+                              <!-- <input type="text" value="1"> -->
+                              <form action="{% url 'store:add-to-cart' %}">
+                              <input name="quantity" class="form-control border-0 shadow-0 p-0" type="text" value="1">
+                          </div>
+                      </div>
+
+                      
+                        <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                        <button type="submit" class="btn btn-danger btn-lg btn-block h-100 d-flex align-items-center justify-content-center px-0">Add to Cart</button>
+                      
+                      </form>
+
+                      
+                    
+
+
+
+                  </div>
+                  <div class="product__details__widget">
+                      <ul>
+                          <li>
+                              <span>Availability:</span>
+                              <div class="stock__checkbox">
+                                  <label for="stockin">
+                                      In Stock
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <span>Available category:</span>
+                              <a href="{% url 'store:category-products' product.category.slug %}">{{product.category}}</a>
+                          </li>
+                         
+                          <li>
+                              <span>Promotions:</span>
+                              <p>Free shipping</p>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-12">
+              <div class="product__details__tab">
+                  <ul class="nav nav-tabs" role="tablist">
+                      <li class="nav-item">
+                          <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
+                      </li>
+                     
+                  </ul>
+                  <div class="tab-content">
+                      <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                          <h6>Description</h6>
+                          <p>{{product.detail_description}}</p>
+                      </div>
+                     
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-12 text-center">
+              <div class="related__title">
+                  <h5>RELATED PRODUCTS</h5>
+              </div>
+          </div>
+          {% if related_products %}
+          {% for rp in related_products %}
+
+          <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="product__item">
+                {% if rp.product_image %}
+                    <div class="product__item__pic set-bg" data-setbg="{{rp.product_image.url}}">
+                    {% else %}
+                    <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{rp.title}}">
+                    
+                    {% endif %}
+                      <div class="label new">New</div>
+                      <ul class="product__hover">
+                        {% if rp.product_image %}
+                          <li><a href="{{rp.product_image.url}}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                        {% else %}
+                        <li><a href="{% static 'img/product-1.jpg' %}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                        {% endif %}
+                         
+                          <li><a href="{% url 'store:product-detail' rp.slug %}"><span class="icon_bag_alt"></span></a></li>
+                      </ul>
+                  </div>
+                  <div class="product__item__text">
+                      <h6><a href="{% url 'store:product-detail' rp.slug %}">{{rp.title}}</a></h6>
+                     
+                      <div class="product__price">£ {{rp.price}}</div>
+                  </div>
+              </div>
+          </div>
+          
+       
+
+          {% endfor %}
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</section>
+<!-- Product Details Section End -->
+{% endblock content %}

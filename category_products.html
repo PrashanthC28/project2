@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block content %}
+          <!-- Shop Section Begin -->
+    <section class="shop spad">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-3 col-md-3">
+                  <div class="shop__sidebar">
+                      <div class="sidebar__categories">
+                          <div class="section-title">
+                              <h4>Categories</h4>
+                          </div>
+                          <div class="categories__accordion">
+                              <div class="accordion" id="accordionExample">
+                                  <div class="card">
+                                      <div class="card-heading active">
+                                          <a data-toggle="collapse" data-target="#collapseOne">Select Category</a>
+                                      </div>
+                                      <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                          <div class="card-body">
+                                              <ul>
+                                                
+                                                  <li>
+                                                    {% if categories %}
+                                                    {% for cat in categories %}
+                                                      <a href="{% url 'store:category-products' cat.slug %}">
+                                                        <div class="py-2 px-4 {% if category == cat %}bg-dark text-white {% else %}bg-light{% endif %} mb-3">
+                                                          <strong class="small text-uppercase font-weight-bold">{{cat.title}}</strong>
+                                                        </div>
+                                                      </a>
+                                                    {% endfor %}
+                                                  {% endif %}
+                                                    
+                                                 </li>
+                                              </ul>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                     
+                  </div>
+              </div>
+              <div class="col-lg-9 col-md-9">
+                  <div class="row">
+
+                    {% if products %}
+                    {% for product in products %}
+           
+                      <div class="col-lg-4 col-md-6">
+                          <div class="product__item">
+                            {% if product.product_image %}
+                            <div class="product__item__pic set-bg" data-setbg="{{product.product_image.url}}">
+                          {% else %}
+                            <div class="product__item__pic set-bg" data-setbg="{% static 'img/product-1.jpg' %}">
+                          {% endif %}
+                                  <div class="label new">New</div>
+                                  <ul class="product__hover">
+                                      <li><a href="{{product.product_image.url}}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                      <li>
+                                        <a href="{% url 'store:product-detail' product.slug %}" class="btn btn-sm btn-warning"><span class="icon_bag_alt"></span></a>
+                                        </li>
+                                  </ul>
+                              </div>
+                              <div class="product__item__text">
+                                  <h6><a href="{% url 'store:product-detail' product.slug %}">{{product.title}}</a></h6>
+                                  <div class="rating">
+                                      <i class="fa fa-star"></i>
+                                      <i class="fa fa-star"></i>
+                                      <i class="fa fa-star"></i>
+                                      <i class="fa fa-star"></i>
+                                      <i class="fa fa-star"></i>
+                                  </div>
+                                  <div class="product__price">£ {{product.price}}</div>
+                              </div>
+                          </div>
+                      </div>
+
+                      {% endfor %}
+                  {% endif %}
+                     
+</div>
+                      <div class="pagination d-flex justify-content-center">
+    <span class="step-links">
+        {% if products.has_previous %}
+            <a class="btn btn-primary" href="?page={{ products.previous_page_number }}">&laquo;</a>
+        {% endif %}
+
+        {% for l in  products.paginator.page_range %}
+            {% if l <= products.number|add:2 and l >= products.number|add:-2 %}
+            {% if l == products.number %}
+                <a class="btn btn-success" href="?page={{forloop.counter}}">{{forloop.counter}}</a>
+            {% else %}
+            <a class="btn btn-primary" href="?page={{forloop.counter}}">{{forloop.counter}}</a>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        
+        {% if products.has_next %}
+            <a class="btn btn-primary" href="?page={{ products.next_page_number }}">&raquo;</a>
+        {% endif %}
+            </span>
+        </div>
+      </div>
+    </div>
+  </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!-- Shop Section End -->
+
+      {% endblock content %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+    {% block content %}
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="breadcrumb__links">
+                      <a href="/"><i class="fa fa-home"></i> Home</a>
+                      <span>Shopping cart</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- Breadcrumb End -->
+
+  <!-- Shop Cart Section Begin -->
+  <section class="shop-cart spad">
+      <div class="container">
+        
+        {% if cart_products %}
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="shop__cart__table">
+                      <table>
+                          <thead>
+                              <tr>
+                                  <th>Product</th>
+                                  <th>Price</th>
+                                  <th>Quantity</th>
+                                  <th>Total</th>
+                                  <th></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+
+
+                            {% for cart_product in cart_products %}
+                              <tr>
+                                  <td class="cart__product__item">
+                                    {% if cart_product.product.product_image %}
+                                    <img src="{{cart_product.product.product_image.url}}" alt="" width="70">
+                                    {% else %}
+                                    <img src="{% static 'img/product-detail-3.jpg' %}" alt="">
+                                    {% endif %}
+
+                                     
+                                      <div class="cart__product__item__title">
+                                          <h6><a href="{% url 'store:product-detail' cart_product.product.slug %}">{{cart_product.product.title}}</a></h6>
+                                        
+                                      </div>
+                                  </td>
+                                  <td class="cart__price">£ {{cart_product.product.price}}</td>
+                                  <td class="cart__quantity">
+
+
+
+                                    <div class="quantity">
+                                      <a href="{% url 'store:minus-cart' cart_product.id %}" class="dec-btn p-0 ml-2"><i class="fas fa-2x ">-</i></a>
+                                      {% comment %} <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button> {% endcomment %}
+                                      <input class=" border-0 shadow-0 p-0" type="text" value="{{cart_product.quantity}}"/>
+                                      {% comment %} <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button> {% endcomment %}
+                                      <a href="{% url 'store:plus-cart' cart_product.id %}" class="inc-btn p-0"><i class="fas fa-2x ">+</i></a>
+                                    </div>
+
+                                    
+                                      <!-- <div class="pro-qty">
+                                          <input type="text" value="1">
+                                      </div> -->
+                                  </td>
+                                  <td class="cart__total">£ {{cart_product.total_price|intcomma}}</td>
+                                 
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                  <div class="cart__btn">
+                      <a href="{% url 'store:home' %}">Continue Shopping</a>
+                  </div>
+              </div>
+              <!-- <div class="col-lg-6 col-md-6 col-sm-6">
+                  <div class="cart__btn update__btn">
+                      <a href="#"><span class="icon_loading"></span> Update cart</a>
+                  </div>
+              </div> -->
+          </div>
+          <div class="row">
+              <div class="col-lg-6">
+                  <!-- <div class="discount__content">
+                      <h6>Discount codes</h6>
+                      <form action="#">
+                          <input type="text" placeholder="Enter your coupon code">
+                          <button type="submit" class="site-btn">Apply</button>
+                      </form>
+                  </div> -->
+              </div>
+              <div class="col-lg-4 offset-lg-2">
+                  <div class="cart__total__procced">
+                      <h6>Cart total</h6>
+                      <ul>
+                        <li>Subtotal <span>£ {{amount|intcomma}}/-</span></li>
+                       
+                        <li>shipping Charge <span>+ £ {{shipping_amount}}/-</span></li>
+                        
+                        <li>Total <span>£ {{total_amount|intcomma}}/-</span></li>
+                      </ul>
+
+
+                     
+                  
+                  <form action="{% url 'store:checkout' %}" id="myform">
+
+                    {% if addresses %}
+                    <h5 class="text-uppercase my-5 font-weight-bold">Select Shipping Address</h5>
+                      {% for address in addresses %}
+                        <div class="mb-3">
+                        <input type="radio" name="address" required value="{{address.id}}"> <strong>Address {{forloop.counter}}</strong> <br>
+                        ( {{address.locality}}, {{address.city}}, {{address.Zipcode}} )
+                        </div>
+                      {% endfor %} 
+                      
+                      {% comment %} For Cash on Delivery {% endcomment %}
+                    <button type="submit"  href="#" class="primary-btn px-3">Cash on Delivery</button>
+                  
+
+                      {%else%}
+                      <h5 class="font-weight-bold"> For Checkout Go to <a href="{% url 'store:profile' %}">Profile</a> and Add your Address</h5>
+                    {% endif %}
+
+                    <!-- Set up a container element for the button -->
+                    <div class="text-end" id="paypal-button-container"></div>
+
+                   
+                </form>
+
+
+                      
+                  </div>
+              </div>
+          </div>
+        {%else%}
+        <div class="text-center">
+            <h3>There is no item in your cart</h3>
+        <div class="cart__btn mt-5">
+            <a class="bg-danger text-light" href="{% url 'store:home' %}">Continue Shopping</a>
+        </div>
+        </div>
+        
+
+        {%endif%}
+      </div>
+  </section>
+  <!-- Shop Cart Section End -->
+  {% endblock content %}
